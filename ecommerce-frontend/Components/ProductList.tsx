@@ -23,6 +23,7 @@ export interface Product {
   createdAt: Date;
   updatedAt: Date;
   image: string;
+  id: string;
 }
 
 export default function ProductList({ products }: ProductProps) {
