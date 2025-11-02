@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
 import { Button } from "./ui/button";
+import { useCartStore } from "@/store/cart-store";
 
 interface SingleProduct {
   product: Product;
@@ -25,6 +28,19 @@ interface Rating {
 }
 
 export default function ProductDetail({ product }: SingleProduct) {
+  const { items, addItem, removeItem, clearCart } = useCartStore();
+  const cartItem = items.find((item) => item.id === product.id);
+  const quantity = cartItem ? cartItem.quantity : 0;
+
+  const onAddItem = () => {
+    addItem({
+      id: product.id,
+      name: product.Name,
+      price: product.price,
+      imageUrl: product.image,
+      quantity: 1,
+    });
+  };
   return (
     <div className="max-w-[80%] mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 items-center">
       {product.image && (
@@ -49,9 +65,11 @@ export default function ProductDetail({ product }: SingleProduct) {
         )}
 
         <div className="flex space-x-4 items-center mt-3">
-          <Button variant={"outline"}>-</Button>
-          <span className="text-lg font-semibold">0</span>
-          <Button>+</Button>
+          <Button onClick={() => removeItem(product.id)} variant={"outline"}>
+            -
+          </Button>
+          <span className="text-lg font-semibold">{quantity}</span>
+          <Button onClick={onAddItem}>+</Button>
         </div>
       </div>
     </div>
