@@ -8,7 +8,6 @@ export default function VerifyEmail() {
   const [email, setEmail] = useState("");
 
   const handleSendVerification = () => {
-    // TODO: Add Firebase or backend logic to send verification email
     console.log("Verification email sent to:", email);
   };
 
