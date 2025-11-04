@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "../../../Components/ui/button";
 import {
   DropdownMenu,
@@ -16,7 +16,7 @@ import {
 export type Users = {
   id: string;
   name: string;
-  products_purchased: number;
+  products: number;
   email: string;
 };
 
@@ -27,20 +27,30 @@ export const columns: ColumnDef<Users>[] = [
   },
   {
     accessorKey: "name",
-    header: "Name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "email",
     header: "Email",
   },
   {
-    accessorKey: "products purchased",
-    header: "Products purchased",
+    accessorKey: "products",
+    header: "Products",
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
+      const User = row.original;
 
       return (
         <DropdownMenu>
@@ -51,15 +61,11 @@ export const columns: ColumnDef<Users>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(User.id)}
             >
-              Copy payment ID
+              Copy User ID
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

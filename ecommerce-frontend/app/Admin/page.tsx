@@ -5,10 +5,7 @@ import React from "react";
 export default function page() {
   return (
     <SidebarProvider>
-      <AppSidebar />
-      <div>
-        <SidebarTrigger />
-      </div>
+      <div></div>
     </SidebarProvider>
   );
 }
