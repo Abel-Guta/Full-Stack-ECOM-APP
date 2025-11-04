@@ -4,7 +4,8 @@ import { UserPieChart } from "@/Components/UserPieChart";
 import { ProductBarChartComponent } from "@/Components/ProductBarChart";
 import { ProductPieChart } from "@/Components/ProductPieChart";
 import { TransactionsBarChartComponent } from "@/Components/TransactionsBarChart";
-import { TransactionsPieChart } from "@/Components/TransactionsPieChart";
+import { OrderPieChart } from "@/Components/OrderPieChart";
+import { OrderBarChartComponent } from "@/Components/OrdersBarchart";
 
 async function getData(): Promise<Transactions[]> {
   // Fetch data from your API here.
@@ -21,28 +22,28 @@ async function getData(): Promise<Transactions[]> {
       total_price: 60,
       quantity: 100,
       name: "abel5",
-      status: "Pending",
+      status: "Processing",
     },
     {
       id: "728ed52f",
       total_price: 500,
       quantity: 100,
       name: "abel6",
-      status: "Completed",
+      status: "Delivered",
     },
     {
       id: "728ed52f",
       total_price: 78,
       quantity: 100,
       name: "abel7",
-      status: "Pending",
+      status: "Processing",
     },
     {
       id: "728ed52f",
       total_price: 90,
       quantity: 100,
       name: "abel8",
-      status: "Pending",
+      status: "Delivered",
     },
     {
       id: "728ed52f",
@@ -62,8 +63,8 @@ export default async function DemoPage() {
   return (
     <div>
       <div className="flex flex-col md:flex-row items-center space-x-4">
-        <TransactionsPieChart />
-        <TransactionsBarChartComponent />
+        <OrderPieChart />
+        <OrderBarChartComponent />
       </div>
 
       <div className="container mx-auto py-10">

@@ -1,11 +1,12 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import {
-  PenBox,
-  ChevronDown,
+  PenBoxIcon,
   PersonStandingIcon,
   CheckCircle,
   ListChevronsUpDown,
   LogOutIcon,
-  PenBoxIcon,
 } from "lucide-react";
 
 import {
@@ -19,36 +20,20 @@ import {
   SidebarMenuItem,
 } from "../Components/ui/sidebar";
 
+import { cn } from "@/lib/utils";
+
 // Menu items.
 const items = [
-  {
-    title: "Users",
-    url: "/Admin/Users",
-    icon: PersonStandingIcon,
-  },
-  {
-    title: "Products",
-    url: "/Admin/Products",
-    icon: PenBoxIcon,
-  },
-  {
-    title: "Transactions",
-    url: "/Admin/Payments",
-    icon: CheckCircle,
-  },
-  {
-    title: "Orders",
-    url: "#",
-    icon: ListChevronsUpDown,
-  },
-  {
-    title: "Logout",
-    url: "#",
-    icon: LogOutIcon,
-  },
+  { title: "Users", url: "/Admin/Users", icon: PersonStandingIcon },
+  { title: "Products", url: "/Admin/Products", icon: PenBoxIcon },
+  { title: "Payments", url: "/Admin/Payments", icon: CheckCircle },
+  { title: "Orders", url: "/Admin/Orders", icon: ListChevronsUpDown },
+  { title: "Logout", url: "/Auth/SignIn", icon: LogOutIcon },
 ];
 
 export function AppSidebar() {
+  const pathname = usePathname();
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -56,16 +41,26 @@ export function AppSidebar() {
           <SidebarGroupLabel>Admin</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className="mt-5 p-6">
-                    <a href={item.url}>
-                      <item.icon className="h-6 w-6" />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {items.map((item) => {
+                const isActive = pathname.startsWith(item.url);
+
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      className={cn(
+                        "mt-5 p-6 hover:bg-black/80 transition",
+                        isActive && "bg-black/80 text-white"
+                      )}
+                    >
+                      <a href={item.url}>
+                        <item.icon className="h-6 w-6" />
+                        <span>{item.title}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

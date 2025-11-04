@@ -11,14 +11,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../../Components/ui/dropdown-menu";
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+
 export type Transactions = {
   id: string;
   quantity: number;
   total_price: number;
   name: string;
-  status: "Pending" | "Failed" | "Completed";
+  status: "Processing" | "Failed" | "Delivered";
 };
 
 export const columns: ColumnDef<Transactions>[] = [

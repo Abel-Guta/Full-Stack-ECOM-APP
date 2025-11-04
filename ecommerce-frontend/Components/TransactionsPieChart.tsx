@@ -30,31 +30,31 @@ const chartData = [
 
 const chartConfig = {
   Users: {
-    label: "Products",
+    label: "Users Age",
   },
   chrome: {
-    label: "Perfumes",
+    label: "Age 16-18",
     color: "var(--chart-1)",
   },
   safari: {
-    label: "Phone case",
+    label: "Age 18-25",
     color: "var(--chart-2)",
   },
   firefox: {
-    label: "Smart-watch",
+    label: "Age 25-30",
     color: "var(--chart-3)",
   },
   edge: {
-    label: "Shoes",
+    label: "Age 30-45",
     color: "var(--chart-4)",
   },
   other: {
-    label: "T-shirts",
+    label: "Age  45+",
     color: "var(--chart-5)",
   },
 } satisfies ChartConfig;
 
-export function ProductPieChart() {
+export function TransactionsPieChart() {
   return (
     <Card className="flex flex-col w-[50%]">
       <CardHeader className="items-center pb-0">

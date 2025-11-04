@@ -21,40 +21,40 @@ import {
 export const description = "A simple pie chart";
 
 const chartData = [
-  { browser: "chrome", Users: 275, fill: "var(--color-chrome)" },
+  { browser: "chrome", Users: 700, fill: "var(--color-chrome)" },
   { browser: "safari", Users: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", Users: 187, fill: "var(--color-firefox)" },
-  { browser: "edge", Users: 173, fill: "var(--color-edge)" },
-  { browser: "other", Users: 90, fill: "var(--color-other)" },
+  { browser: "firefox", Users: 116, fill: "var(--color-firefox)" },
+  { browser: "edge", Users: 120, fill: "var(--color-edge)" },
+  { browser: "other", Users: 110, fill: "var(--color-other)" },
 ];
 
 const chartConfig = {
   Users: {
-    label: "Products",
+    label: "Users Age",
   },
   chrome: {
-    label: "Perfumes",
+    label: "Age 16-18",
     color: "var(--chart-1)",
   },
   safari: {
-    label: "Phone case",
+    label: "Age 18-25",
     color: "var(--chart-2)",
   },
   firefox: {
-    label: "Smart-watch",
+    label: "Age 25-30",
     color: "var(--chart-3)",
   },
   edge: {
-    label: "Shoes",
+    label: "Age 30-45",
     color: "var(--chart-4)",
   },
   other: {
-    label: "T-shirts",
+    label: "Age  45+",
     color: "var(--chart-5)",
   },
 } satisfies ChartConfig;
 
-export function ProductPieChart() {
+export function OrderPieChart() {
   return (
     <Card className="flex flex-col w-[50%]">
       <CardHeader className="items-center pb-0">
