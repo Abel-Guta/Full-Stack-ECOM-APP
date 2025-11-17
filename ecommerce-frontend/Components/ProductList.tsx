@@ -22,8 +22,8 @@ export interface Product {
   ratings?: Rating[];
   createdAt: Date;
   updatedAt: Date;
-  image: string;
-  id: string;
+  images: string[];
+  _id: string;
 }
 
 export default function ProductList({ products }: ProductProps) {

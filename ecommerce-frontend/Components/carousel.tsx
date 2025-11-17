@@ -4,11 +4,11 @@ import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import Image from "next/image";
 
-interface carouselProps {
+export interface carouselProps {
   products: Product[];
 }
 
-interface Rating {
+export interface Rating {
   userId: string;
   rate: number;
 }
@@ -23,7 +23,8 @@ export interface Product {
   ratings?: Rating[];
   createdAt: Date;
   updatedAt: Date;
-  image: string;
+  images: string[];
+  _id: string;
 }
 
 export default function Carousel({ products }: carouselProps) {
@@ -39,11 +40,11 @@ export default function Carousel({ products }: carouselProps) {
   const price = currentProduct.price;
   return (
     <Card className="relative overflow-hidden rounded-lg shadow-md border-gray-300 py-0">
-      {currentProduct.image && (
+      {currentProduct.images && (
         <div className="relative h-80 w-full">
           <Image
             alt={currentProduct.Name}
-            src={currentProduct.image}
+            src={`${process.env.NEXT_PUBLIC_BASE_URL}${currentProduct.images[0]}`}
             fill
             className="object-cover transition "
           />

@@ -1,49 +1,50 @@
+"use client";
+
 import { columns, Products } from "./columns";
 import { DataTable } from "./data-table";
 import { UserPieChart } from "@/Components/UserPieChart";
 import { ProductBarChartComponent } from "@/Components/ProductBarChart";
 import { ProductPieChart } from "@/Components/ProductPieChart";
+import { useEffect, useState } from "react";
+import { useProduct } from "@/store/product-store";
 
-async function getData(): Promise<Products[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      name: "Abel",
-      stock: 100,
-    },
-    {
-      id: "728ed52f",
-      name: "Abel9",
-      stock: 100,
-    },
-    {
-      id: "728ed52f",
-      name: "Abel67",
-      stock: 100,
-    },
-    {
-      id: "728ed52f",
-      name: "Abel12",
-      stock: 100,
-    },
-    {
-      id: "728ed52f",
-      name: "Abel2",
-      stock: 100,
-    },
-    {
-      id: "728ed52f",
-      name: "Abel4",
-      stock: 100,
-    },
+export async function getData(): Promise<Products[]> {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/product/products`
+    );
+    const data = await res.json();
+    const products = data.products.map((p: any) => ({
+      id: p._id,
+      name: p.Name,
+      stock: p.stock,
+    }));
 
-    // ...
-  ];
+    return products;
+  } catch (err) {
+    console.log("Error fetching products:", err);
+    return [];
+  }
 }
 
-export default async function DemoPage() {
-  const data = await getData();
+export default function DemoPage() {
+  const { product, setProduct, emptyProduct } = useProduct();
+
+  const [loading, setLoading] = useState(true);
+  const fetchData = async () => {
+    const products = await getData();
+    if (products.length > 0) {
+      setProduct(products);
+    }
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
     <div>
@@ -53,7 +54,7 @@ export default async function DemoPage() {
       </div>
 
       <div className="container mx-auto py-10">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={product} />
       </div>
     </div>
   );

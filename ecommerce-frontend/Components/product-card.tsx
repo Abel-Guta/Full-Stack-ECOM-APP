@@ -23,19 +23,19 @@ export interface Product {
   ratings?: Rating[];
   createdAt: Date;
   updatedAt: Date;
-  image: string;
-  id: string;
+  images: string[];
+  _id: string;
 }
 
 export default function ProductCard({ product }: ProductProps) {
   return (
-    <Link href={`/products/${product.id}`} className="block h-full">
+    <Link href={`/products/${product._id}`} className="block h-full">
       <Card className="group hover:shadow-2xl transition duration-300 py-0 h-full flex flex-col border-gray-300 gap-0">
-        {product.image && (
+        {product.images && (
           <div className="relative h-60 w-full">
             <Image
               alt={product.Name}
-              src={product.image}
+              src={`${process.env.NEXT_PUBLIC_BASE_URL}${product.images[0]}`}
               fill
               className="object-cover group-hover:opacity-70 transition-opacity duration-300 rounded-t-lg"
             />

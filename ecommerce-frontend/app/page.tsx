@@ -1,143 +1,114 @@
-import Carousel from "@/Components/carousel";
-import Navbar from "@/Components/Navbar";
-import { Button } from "@/Components/ui/button";
-import Image from "next/image";
+"use client";
+
 import Link from "next/link";
+import { Button } from "@/Components/ui/button";
+import { useState } from "react";
+import { FcGoogle } from "react-icons/fc";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
-export const dummyProducts = [
-  {
-    Name: "Wireless Headphones",
-    description:
-      "High-quality over-ear wireless headphones with noise cancellation.",
-    price: 120,
-    category: "Electronics",
-    stock: 25,
-    ratings: [
-      { userId: "1", rate: 5 },
-      { userId: "2", rate: 4 },
-    ],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    image: "/product demo.webp",
-    id: "1",
-  },
-  {
-    Name: "Smart Watch",
-    description:
-      "Fitness and health tracking smart watch with long battery life.",
-    price: 99,
-    category: "Electronics",
-    stock: 40,
-    ratings: [
-      { userId: "3", rate: 5 },
-      { userId: "4", rate: 4 },
-    ],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    image: "/product banner.jpg",
-    id: "2",
-  },
-  {
-    Name: "Gaming Laptop",
-    description: "High-performance laptop for gaming and productivity.",
-    price: 1500,
-    category: "Computers",
-    stock: 10,
-    ratings: [
-      { userId: "5", rate: 5 },
-      { userId: "6", rate: 5 },
-    ],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    image: "/product demo.webp",
-    id: "3",
-  },
-  {
-    Name: "Bluetooth Speaker",
-    description: "Portable speaker with excellent sound and waterproof design.",
-    price: 60,
-    category: "Electronics",
-    stock: 50,
-    ratings: [
-      { userId: "7", rate: 4 },
-      { userId: "8", rate: 5 },
-    ],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    image: "/product banner.jpg",
-    id: "4",
-  },
-  {
-    Name: "DSLR Camera",
-    description: "Professional DSLR camera for high-quality photography.",
-    price: 850,
-    category: "Cameras",
-    stock: 15,
-    ratings: [
-      { userId: "9", rate: 5 },
-      { userId: "10", rate: 4 },
-    ],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    image: "/product demo.webp",
-    id: "5",
-  },
-  {
-    Name: "Bluetooth Speaker",
-    description: "Portable speaker with excellent sound and waterproof design.",
-    price: 60,
-    category: "Electronics",
-    stock: 50,
-    ratings: [
-      { userId: "7", rate: 4 },
-      { userId: "8", rate: 5 },
-    ],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    image: "/product banner.jpg",
-    id: "6",
-  },
-];
+export default function SignIn() {
+  const router = useRouter();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-export default function Home() {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message || "Signup failed");
+      if (data.user.role === "admin" && isAdmin) {
+        toast.success("Welcome ");
+        router.push("/Admin/Users");
+      } else {
+        toast.success("Sign In successful! ");
+        router.push("/Home");
+      }
+
+      setFormData({ email: "", password: "" });
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="flex flex-col">
-      <Navbar />
-      <div className="mt-4  grow container max-w-[85%] mx-auto px-4 py-1">
-        <section className="rounded bg-neutral-100 py-8 sm:py-12">
-          <div className="mx-auto grid grid-cols-1 items-center justify-items-center gap-8 px-8 sm:px-16 md:grid-cols-2">
-            <div className="max-w-md space-y-4">
-              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-                Welcome to My Ecommerce
-              </h2>
-              <p className="text-neutral-600">
-                Discover the latest products at the best prices.
-              </p>
-              <Button
-                asChild
-                variant="default"
-                className="inline-flex items-center justify-center rounded-full px-6 py-3 bg-black text-white"
-              >
-                <Link
-                  href="/products"
-                  className="inline-flex items-center justify-center rounded-full px-6 py-3"
-                >
-                  Browse All Products
-                </Link>
-              </Button>
-            </div>
-            <Image
-              alt="Hero Image"
-              src={"/product demo.webp"}
-              className="rounded "
-              width={450}
-              height={450}
+    <div className="flex items-center justify-center h-screen">
+      <div className="h-[650px] flex items-center justify-center rounded-4xl bg-neutral-100 w-[600px] px-4 mx-auto shadow-2xl">
+        <div className="max-w-md w-full bg-white shadow-lg rounded-2xl p-8 space-y-6">
+          <h1 className="text-2xl font-bold text-center">
+            {isAdmin ? "Admin Login" : "Sign In"}
+          </h1>
+
+          <form
+            onSubmit={handleSubmit}
+            className="min-h-[300px] flex flex-col space-y-6"
+          >
+            {/* Email */}
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              onChange={handleChange}
+              className="w-full p-3 border rounded-lg focus:ring focus:ring-black outline-none"
             />
+
+            {/* Password + Forgot Password */}
+            <div className="space-y-1">
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                onChange={handleChange}
+                className="w-full p-3 border rounded-lg focus:ring focus:ring-black outline-none"
+              />
+            </div>
+
+            {/* Login button */}
+            <Button className="w-full bg-black text-white rounded-full py-3 text-lg">
+              Login
+            </Button>
+          </form>
+
+          {/* OR Divider */}
+          <div className="flex items-center justify-center gap-2">
+            <div className="flex-1 h-[1px] bg-neutral-300"></div>
+            <span className="text-neutral-500 text-sm">or</span>
+            <div className="flex-1 h-[1px] bg-neutral-300"></div>
           </div>
-        </section>
-        <section className="py-8">
-          <Carousel products={dummyProducts} />
-        </section>
+
+          {/* Sign Up link */}
+          <p className="text-sm text-center text-neutral-600">
+            Don’t have an account?{" "}
+            <Link href="/Auth/SignUp" className="text-black font-semibold">
+              Sign Up
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

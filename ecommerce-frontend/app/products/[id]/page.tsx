@@ -8,31 +8,29 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  let product = null;
 
-  console.log(id);
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/product/product/${id}`,
+      { cache: "no-store" }
+    );
 
-  // fetch using Id
-  const dummyProduct = {
-    Name: `Wireless Headphones ${id}`,
-    description:
-      "High-quality over-ear wireless headphones with noise cancellation.",
-    price: 120,
-    category: "Electronics",
-    stock: 25,
-    ratings: [
-      { userId: "1", rate: 5 },
-      { userId: "2", rate: 4 },
-    ],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    image: "/product demo.webp",
-    id,
-  };
+    const data = await res.json();
+
+    if (data.success) {
+      product = data.product;
+    } else {
+      console.log("Failed to fetch product:", data.message);
+    }
+  } catch (err) {
+    console.log("Error fetching product:", err);
+  }
 
   return (
     <div className="flex flex-col">
       <Navbar />
-      <ProductDetail product={dummyProduct} />
+      <ProductDetail product={product} />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import Navbar from "@/Components/Navbar";
 import { SidebarProvider, SidebarTrigger } from "@/Components/ui/sidebar";
 
 import { AppSidebar } from "@/Components/app-sidebar";
+import { Toaster } from "@/Components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable}  min-h-full  bg-white antialiased `}
       >
         <main>{children}</main>
+        <Toaster className="bg-accent" />
       </body>
     </html>
   );

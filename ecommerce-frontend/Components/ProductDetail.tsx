@@ -19,8 +19,8 @@ interface Product {
   ratings?: Rating[];
   createdAt: Date;
   updatedAt: Date;
-  image: string;
-  id: string;
+  images: string[];
+  _id: string;
 }
 interface Rating {
   userId: string;
@@ -29,25 +29,52 @@ interface Rating {
 
 export default function ProductDetail({ product }: SingleProduct) {
   const { items, addItem, removeItem, clearCart } = useCartStore();
-  const cartItem = items.find((item) => item.id === product.id);
+  const cartItem = items.find((item) => item.id === product._id);
   const quantity = cartItem ? cartItem.quantity : 0;
 
-  const onAddItem = () => {
+  const onAddItem = async () => {
     addItem({
-      id: product.id,
+      id: product._id,
       name: product.Name,
       price: product.price,
-      imageUrl: product.image,
+      imageUrl: product.images[0],
       quantity: 1,
     });
+
+    try {
+      // 2. Add to backend
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/cart/addtocart`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productId: product._id,
+            quantity: 1,
+          }),
+        }
+      );
+
+      const data = await res.json();
+      console.log("API response:", data);
+
+      if (!res.ok) {
+        console.error("Failed to add to cart:", data);
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
   };
   return (
     <div className=" mx-auto px-4  flex flex-col md:flex-row gap-8 items-center grow mt-4   container max-w-[85%] py-1">
-      {product.image && (
+      {product.images && (
         <div className="relative h-96  w-full md:w-1/2 rounded-lg overflow-hidden">
           <Image
             alt={product.Name}
-            src={product.image}
+            src={`${process.env.NEXT_PUBLIC_BASE_URL}${product.images[0]}`}
             fill
             className="transition duration-300 hover:opacity-90"
           />
@@ -65,7 +92,7 @@ export default function ProductDetail({ product }: SingleProduct) {
         )}
 
         <div className="flex space-x-4 items-center mt-3">
-          <Button onClick={() => removeItem(product.id)} variant={"outline"}>
+          <Button onClick={() => removeItem(product._id)} variant={"outline"}>
             -
           </Button>
           <span className="text-lg font-semibold">{quantity}</span>
@@ -75,3 +102,5 @@ export default function ProductDetail({ product }: SingleProduct) {
     </div>
   );
 }
+
+// minus on cart needs to work add 1 to cart works
