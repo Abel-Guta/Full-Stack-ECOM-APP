@@ -26,7 +26,7 @@ export function ShippingAddressModal({
   const [loading, setLoading] = useState(false);
   const [cartitems, setCartItems] = useState();
   const [shippingAddress, setShippingAdress] = useState<ShippingAddress>();
-  const { items } = useCartStore();
+  const { items, clearCart } = useCartStore();
   const total = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
@@ -124,6 +124,7 @@ export function ShippingAddressModal({
       if (!orderData.success) return toast.error(orderData.message);
       const stripeSessionUrl = orderData.sessionUrl;
       window.location.href = stripeSessionUrl;
+      clearCart();
       setOpen(false);
     } catch (err) {
       console.error("Checkout failed:", err);

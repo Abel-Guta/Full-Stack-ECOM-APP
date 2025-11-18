@@ -14,12 +14,12 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { userId, role } = useUser();
-  console.log(userId, role);
 
   useEffect(() => {
-    if (userId === "") {
-      router.push("/");
-    }
+    //   if (userId === "null") {
+    //     router.push("/");
+    //   }
+    console.log(userId, role);
     const fetchProducts = async () => {
       try {
         const res = await fetch(
@@ -38,8 +38,7 @@ export default function Home() {
     };
 
     fetchProducts();
-  }, []);
-  console.log(products);
+  }, [userId, role]);
 
   return (
     <div className="flex flex-col">
@@ -50,7 +49,8 @@ export default function Home() {
           <div className="mx-auto grid grid-cols-1 items-center justify-items-center gap-8 px-8 sm:px-16 md:grid-cols-2">
             <div className="max-w-md space-y-4">
               <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-                Welcome to My Ecommerce
+                Welcome to
+                <br /> H-MARKETS
               </h2>
               <p className="text-neutral-600">
                 Discover the latest products at the best prices.
@@ -65,7 +65,7 @@ export default function Home() {
 
             <Image
               alt="Hero Image"
-              src="/product demo.webp"
+              src="/open.jpg"
               width={450}
               height={450}
               className="rounded"

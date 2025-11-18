@@ -4,7 +4,6 @@ import { DataTable } from "./data-table";
 import { UserPieChart } from "@/Components/UserPieChart";
 
 async function getData(): Promise<Users[]> {
-  // Fetch data from your API here.
   return [
     {
       id: "728ed52f",

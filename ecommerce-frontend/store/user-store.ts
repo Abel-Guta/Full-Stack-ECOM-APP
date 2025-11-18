@@ -13,11 +13,11 @@ interface UserState {
 export const useUser = create<UserState>()(
   persist(
     (set) => ({
-      userId: "",
+      userId: "null",
       role: "customer",
       setUserId: (userId) => set({ userId }),
       setRole: (role) => set({ role }),
-      clearUserId: () => set({ userId: "" }),
+      clearUserId: () => set({ userId: "null" }),
       clearRole: () => set({ role: "customer" }),
     }),
     {

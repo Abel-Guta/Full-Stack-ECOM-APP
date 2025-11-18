@@ -37,7 +37,7 @@ export default function page() {
                   <div className="flex justify-between">
                     <span className="font-medium">{item.name}</span>
                     <span className="font-semibold">
-                      {(item.price * item.quantity).toFixed(2)}
+                      {item.price * item.quantity}
                     </span>
                   </div>
 

@@ -54,9 +54,7 @@ export default function Carousel({ products }: carouselProps) {
         <CardTitle className="text-3xl font-bold text-white mb-2 transition">
           {currentProduct.Name}
         </CardTitle>
-        {price && (
-          <p className="text-xl text-white transition">${price.toFixed(2)}</p>
-        )}
+        {price && <p className="text-xl text-white transition">${price}</p>}
       </CardContent>
     </Card>
   );

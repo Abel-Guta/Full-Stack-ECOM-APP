@@ -27,8 +27,8 @@ export async function getData(): Promise<Products[]> {
   }
 }
 
-export default function DemoPage() {
-  const { product, setProduct, emptyProduct } = useProduct();
+export default function ProductsPage() {
+  const { product, setProduct } = useProduct();
 
   const [loading, setLoading] = useState(true);
   const fetchData = async () => {

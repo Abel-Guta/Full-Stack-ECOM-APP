@@ -73,8 +73,6 @@ export function Modal({
       const newproduct = await getData();
       setProduct(newproduct);
 
-      setLoading(false);
-
       if (!res.ok) {
         return toast.error(data.message || "Error creating product");
       }
@@ -83,6 +81,8 @@ export function Modal({
       setOpen(false);
     } catch (error) {
       console.log(Error);
+    } finally {
+      setLoading(false);
     }
   };
 

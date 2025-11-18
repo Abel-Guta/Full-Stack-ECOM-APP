@@ -87,7 +87,7 @@ export default function ProductDetail({ product }: SingleProduct) {
 
         {product.price && (
           <p className="text-lg font-semibold text-gray-900">
-            ${product.price.toFixed(2)}
+            ${product.price}
           </p>
         )}
 

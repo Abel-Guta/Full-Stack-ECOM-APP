@@ -14,10 +14,11 @@ import {
 
 export type Transactions = {
   id: string;
-  quantity: number;
+  paymentStatus: string;
+
   total_price: number;
   name: string;
-  status: "Processing" | "Failed" | "Delivered";
+  orderstatus: "Processing" | "Failed" | "Delivered";
 };
 
 export const columns: ColumnDef<Transactions>[] = [
@@ -33,7 +34,7 @@ export const columns: ColumnDef<Transactions>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Product Name
+          User ID
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -55,22 +56,22 @@ export const columns: ColumnDef<Transactions>[] = [
     },
   },
   {
-    accessorKey: "quantity",
+    accessorKey: "paymentStatus",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Quantity
+          Payment Status
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "orderstatus",
+    header: "Order Status",
   },
 
   {

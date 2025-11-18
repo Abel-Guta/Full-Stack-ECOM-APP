@@ -17,11 +17,12 @@ export default function SignIn() {
     email: "",
     password: "",
   });
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -32,10 +33,7 @@ export default function SignIn() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({
-            email: formData.email,
-            password: formData.password,
-          }),
+          body: JSON.stringify(formData),
         }
       );
 
@@ -43,16 +41,15 @@ export default function SignIn() {
       setUserId(data.user._id);
       setRole(data.user.role);
 
-      if (!res.ok) throw new Error(data.message || "Signup failed");
+      if (!res.ok) throw new Error(data.message || "Login failed");
+
+      toast.success("Welcome Back ✨");
+
       if (data.user.role === "admin" && isAdmin) {
-        toast.success("Welcome ");
-        router.push("/Admin/Users");
+        router.push("/Admin/Products");
       } else {
-        toast.success("Sign In successful! ");
         router.push("/Home");
       }
-
-      setFormData({ email: "", password: "" });
     } catch (err: any) {
       toast.error(err.message);
     } finally {
@@ -61,58 +58,93 @@ export default function SignIn() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="h-[650px] flex items-center justify-center rounded-4xl bg-neutral-100 w-[600px] px-4 mx-auto shadow-2xl">
-        <div className="max-w-md w-full bg-white shadow-lg rounded-2xl p-8 space-y-6">
-          <h1 className="text-2xl font-bold text-center">
-            {isAdmin ? "Admin Login" : "Sign In"}
-          </h1>
+    <div className="h-screen w-full flex items-center justify-center bg-gradient-to-br from-black via-neutral-800 to-neutral-900">
+      <div className="w-[430px] mx-4 rounded-3xl p-8 backdrop-blur-xl bg-white/10 shadow-2xl border border-white/10">
+        {/* Logo or Title */}
+        <h1 className="text-center text-4xl font-bold text-white tracking-wide mb-2">
+          {isAdmin ? "Admin Access" : "Welcome Back"}
+        </h1>
+        <p className="text-center text-neutral-300 mb-6">
+          Please sign in to continue
+        </p>
 
-          <form
-            onSubmit={handleSubmit}
-            className="min-h-[300px] flex flex-col space-y-6"
-          >
-            {/* Email */}
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Email */}
+          <div>
+            <label className="text-sm text-neutral-300 mb-1 block">
+              Email Address
+            </label>
             <input
               type="email"
               name="email"
-              placeholder="Email"
+              className="w-full p-3 rounded-xl bg-white/20 text-white placeholder-neutral-300 border border-white/20 focus:border-white/40 focus:ring-2 focus:ring-white/30 outline-none transition"
+              placeholder="Enter your email"
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring focus:ring-black outline-none"
+              required
             />
-
-            {/* Password + Forgot Password */}
-            <div className="space-y-1">
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                onChange={handleChange}
-                className="w-full p-3 border rounded-lg focus:ring focus:ring-black outline-none"
-              />
-            </div>
-
-            {/* Login button */}
-            <Button className="w-full bg-black text-white rounded-full py-3 text-lg">
-              Login
-            </Button>
-          </form>
-
-          {/* OR Divider */}
-          <div className="flex items-center justify-center gap-2">
-            <div className="flex-1 h-[1px] bg-neutral-300"></div>
-            <span className="text-neutral-500 text-sm">or</span>
-            <div className="flex-1 h-[1px] bg-neutral-300"></div>
           </div>
 
-          {/* Sign Up link */}
-          <p className="text-sm text-center text-neutral-600">
-            Don’t have an account?{" "}
-            <Link href="/Auth/SignUp" className="text-black font-semibold">
-              Sign Up
+          {/* Password */}
+          <div>
+            <label className="text-sm text-neutral-300 mb-1 block">
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              className="w-full p-3 rounded-xl bg-white/20 text-white placeholder-neutral-300 border border-white/20 focus:border-white/40 focus:ring-2 focus:ring-white/30 outline-none transition"
+              placeholder="Enter your password"
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          {/* Admin Switch */}
+          <div className="flex items-center justify-between">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={isAdmin}
+                onChange={() => setIsAdmin(!isAdmin)}
+                className="h-4 w-4 rounded-md"
+              />
+              <span className="text-neutral-300 text-sm">Login as Admin</span>
+            </label>
+
+            <Link
+              href="#"
+              className="text-sm text-neutral-300 hover:text-white transition"
+            >
+              Forgot Password?
             </Link>
-          </p>
+          </div>
+
+          {/* Submit Button */}
+          <Button className="w-full py-3 text-lg rounded-xl bg-white text-black transition hover:bg-neutral-200">
+            {loading ? "Signing in..." : "Sign In"}
+          </Button>
+        </form>
+
+        {/* Divider */}
+        <div className="my-6 flex items-center gap-2">
+          <span className="flex-1 h-[1px] bg-white/20"></span>
+          <span className="text-neutral-300 text-sm">or continue with</span>
+          <span className="flex-1 h-[1px] bg-white/20"></span>
         </div>
+
+        {/* Google */}
+        <button className="w-full flex items-center justify-center gap-3 bg-white/20 hover:bg-white/30 text-white py-3 rounded-xl transition">
+          <FcGoogle size={22} /> Sign in with Google
+        </button>
+
+        {/* Signup */}
+        <p className="text-center text-neutral-300 text-sm mt-5">
+          Don’t have an account?{" "}
+          <Link href="/Auth/SignUp" className="text-white font-semibold">
+            Sign Up
+          </Link>
+        </p>
       </div>
     </div>
   );

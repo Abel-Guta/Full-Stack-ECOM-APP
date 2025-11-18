@@ -54,7 +54,7 @@ export default function ProductCard({ product }: ProductProps) {
             {product.price && (
               <p className="text-lg font-semibold text-gray-900">
                 {" "}
-                ${product.price.toFixed(2)}
+                ${product.price}
               </p>
             )}
             <Button className="mt-4 bg-black text-white">View Details</Button>

@@ -1,3 +1,5 @@
+"use client";
+
 import { columns, Transactions } from "./columns";
 import { DataTable } from "./data-table";
 import { UserPieChart } from "@/Components/UserPieChart";
@@ -6,59 +8,58 @@ import { ProductPieChart } from "@/Components/ProductPieChart";
 import { TransactionsBarChartComponent } from "@/Components/TransactionsBarChart";
 import { OrderPieChart } from "@/Components/OrderPieChart";
 import { OrderBarChartComponent } from "@/Components/OrdersBarchart";
+import { useEffect, useState } from "react";
 
 async function getData(): Promise<Transactions[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      total_price: 50,
-      quantity: 100,
-      name: "abel4",
-      status: "Failed",
-    },
-    {
-      id: "728ed52f",
-      total_price: 60,
-      quantity: 100,
-      name: "abel5",
-      status: "Processing",
-    },
-    {
-      id: "728ed52f",
-      total_price: 500,
-      quantity: 100,
-      name: "abel6",
-      status: "Delivered",
-    },
-    {
-      id: "728ed52f",
-      total_price: 78,
-      quantity: 100,
-      name: "abel7",
-      status: "Processing",
-    },
-    {
-      id: "728ed52f",
-      total_price: 90,
-      quantity: 100,
-      name: "abel8",
-      status: "Delivered",
-    },
-    {
-      id: "728ed52f",
-      total_price: 20,
-      quantity: 100,
-      name: "abel9",
-      status: "Failed",
-    },
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/order/allorders`,
+      {
+        credentials: "include",
+      }
+    );
 
-    // ...
-  ];
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message || "fetch orders");
+
+    // Map backend → frontend type
+    return (data.orders || []).map((o: any) => ({
+      id: o._id,
+      paymentStatus: o.paymentStatus,
+      total_price: o.totalAmount,
+      name: o.user ?? "Unknown User",
+      orderstatus:
+        o.orderStatus === "processing"
+          ? "Processing"
+          : o.orderStatus === "failed"
+          ? "Failed"
+          : "Delivered",
+    }));
+  } catch (err) {
+    console.log("Error fetching products:", err);
+    return [];
+  }
 }
 
-export default async function DemoPage() {
-  const data = await getData();
+export default function OrdersPage() {
+  const [loading, setLoading] = useState(true);
+  const [orders, setOrders] = useState<Transactions[]>([]);
+  const fetchData = async () => {
+    try {
+      const orders = await getData();
+      setOrders(orders);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
     <div>
@@ -68,7 +69,7 @@ export default async function DemoPage() {
       </div>
 
       <div className="container mx-auto py-10">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={orders!} />
       </div>
     </div>
   );

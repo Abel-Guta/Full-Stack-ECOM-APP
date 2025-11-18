@@ -24,11 +24,10 @@ import { cn } from "@/lib/utils";
 
 // Menu items.
 const items = [
-  { title: "Users", url: "/Admin/Users", icon: PersonStandingIcon },
   { title: "Products", url: "/Admin/Products", icon: PenBoxIcon },
-  { title: "Payments", url: "/Admin/Payments", icon: CheckCircle },
+
   { title: "Orders", url: "/Admin/Orders", icon: ListChevronsUpDown },
-  { title: "Logout", url: "/Auth/SignIn", icon: LogOutIcon },
+  { title: "Home", url: "/Home", icon: LogOutIcon },
 ];
 
 export function AppSidebar() {
