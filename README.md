@@ -1,5 +1,7 @@
 Secure E-Commerce Platform with Payment Integration
 
+https://ecom-frontend-beta-liard.vercel.app/
+
 A modern, full-featured e-commerce web application built with Next.js, Express.js, and MongoDB, featuring secure authentication, product management, Stripe payment integration, and admin functionalities.
 
 Table of Contents
